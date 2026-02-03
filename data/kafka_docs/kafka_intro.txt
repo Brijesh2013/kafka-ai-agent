@@ -1,0 +1,8 @@
+Apache Kafka is a distributed event streaming platform used for building
+real-time data pipelines and streaming applications.
+
+Kafka concepts include topics, partitions, producers, consumers,
+consumer groups, offsets, and brokers.
+
+Kafka is widely used for event-driven microservices, real-time analytics,
+log aggregation, and data integration.

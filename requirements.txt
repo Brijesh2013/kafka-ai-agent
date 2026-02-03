@@ -1,0 +1,8 @@
+streamlit
+langchain[all]==1.2.8
+langchain-openai==1.1.7
+langgraph
+openai
+chromadb
+python-dotenv
+tiktoken
