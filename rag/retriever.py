@@ -5,7 +5,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-openai_client = OpenAI()
+# Read API key from environment (loaded from .env by python-dotenv)
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise RuntimeError("OPENAI_API_KEY not set. Set it in your environment or in a .env file (do not commit secrets to source control).")
+
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 CHROMA_HOST = os.getenv("CHROMA_HOST", "chroma")
 CHROMA_PORT = int(os.getenv("CHROMA_PORT", "8000"))
