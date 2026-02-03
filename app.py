@@ -11,7 +11,6 @@ st.set_page_config(page_title="Kafka AI Study Agent", layout="wide")
 
 st.title("📘 Kafka Streaming AI Agent")
 st.write("Ask anything about Apache Kafka")
-st.info(f"Chroma mode: {CHROMA_MODE} — host: {CHROMA_HOST}:{CHROMA_PORT}. Set CHROMA_MODE=local to avoid requiring a Chroma HTTP server.")
 
 query = st.text_input("Enter your Kafka question:")
 
