@@ -4,7 +4,7 @@ from agent.graph import run_agent
 
 # Show which Chroma mode is active so users can troubleshoot connectivity quickly
 CHROMA_MODE = os.getenv("CHROMA_MODE", "http")
-CHROMA_HOST = os.getenv("CHROMA_HOST", "127.0.0.1")
+CHROMA_HOST = os.getenv("CHROMA_HOST", "chroma")
 CHROMA_PORT = os.getenv("CHROMA_PORT", "8000")
 
 st.set_page_config(page_title="Kafka AI Study Agent", layout="wide")
