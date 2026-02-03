@@ -26,7 +26,29 @@ class _Doc:
 
 def get_retriever(k=3):
     """Return a simple retriever object with `get_relevant_documents(query)` method."""
-    client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
+    # CHROMA_MODE: 'http' (default) to connect to a Chroma server, or 'local' to use an
+    # in-process Chroma client (no server required).
+    CHROMA_MODE = os.getenv("CHROMA_MODE", "http").lower()
+
+    client = None
+    if CHROMA_MODE == "local":
+        # Use local in-process client (persists to disk without running a separate server)
+        client = chromadb.Client()
+    else:
+        # Try HTTP client first, fall back to local client on failure
+        try:
+            client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
+        except Exception as e:
+            # Fall back to a local in-process client and warn the user
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                "Could not connect to Chroma HTTP server at %s:%s (%s). Falling back to local in-process Chroma client.",
+                CHROMA_HOST,
+                CHROMA_PORT,
+                e,
+            )
+            client = chromadb.Client()
 
     try:
         collection = client.get_collection(name=COLLECTION_NAME)
