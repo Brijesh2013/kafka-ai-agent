@@ -3,16 +3,33 @@ from openai import OpenAI
 from rag.retriever import get_retriever
 from prompts.kafka_prompt import SYSTEM_PROMPT
 
-openai_client = OpenAI()
+# Initialize OpenAI client from environment for safety and clarity
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise RuntimeError("OPENAI_API_KEY not set. Set it in your environment or in a .env file (do not commit secrets to source control).")
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
+
 OPENAI_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4")
 OPENAI_TEMPERATURE = float(os.getenv("OPENAI_TEMPERATURE", "0.3"))
 
 
 def retrieve_docs(state):
-    retriever = get_retriever()
-    docs = retriever.get_relevant_documents(state["user_query"])
-    content = "\n".join(doc.page_content for doc in docs)
-    return {"retrieved_docs": content}
+    """Retrieve documents for a query; return a safe fallback on failure.
+
+    Returns a dict with key `retrieved_docs` containing the concatenated docs or a
+    clear fallback message so the app can continue running.
+    """
+    try:
+        retriever = get_retriever()
+        docs = retriever.get_relevant_documents(state["user_query"])
+        content = "\n".join(doc.page_content for doc in docs)
+        return {"retrieved_docs": content}
+    except Exception as e:
+        # Log the exception server-side but return a safe message to the user flow
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.exception("Error retrieving documents: %s", e)
+        return {"retrieved_docs": "[Could not retrieve documents — continuing without external docs]."}
 
 
 def generate_answer(state):

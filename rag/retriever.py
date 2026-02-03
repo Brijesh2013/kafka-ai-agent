@@ -12,7 +12,7 @@ if not OPENAI_API_KEY:
 
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
-CHROMA_HOST = os.getenv("CHROMA_HOST", "chroma")
+CHROMA_HOST = os.getenv("CHROMA_HOST", "127.0.0.1")
 CHROMA_PORT = int(os.getenv("CHROMA_PORT", "8000"))
 COLLECTION_NAME = "kafka-docs"
 OPENAI_MODEL = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
